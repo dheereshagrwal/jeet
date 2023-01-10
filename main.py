@@ -13,6 +13,8 @@ load_dotenv()
 sleep_time = int(os.getenv("sleep_time"))
 print(f"sleep_time is {sleep_time}")
 
+
+
 cols = ["name", "ticker", "primary_exchange", "list_date", "type",
         "market_cap", "share_class_shares_outstanding", "publisher_name", "amp_url", "description", "keywords", "Cash In Hand(M)", "Cash Need", "DT Overall Risk", "DT offering Ability", "DT Amt Excluding Shelf", "DT Historical", "c", "h", "l", "o", "v", "vw", "Total Range %", "Gap %", "Premarket Volume (cumm)", "Premarket High", "Premarket High Time", "Premarket Low", "Premarket Low Time", "Premarket Range %",  "Daily Volume Forecast", "First Hour Volume", "Regular Market High Time", "Regular Market Low Time", "Highest Volume Time", "Highest Volume Time - num_trans", "Highest Volume", "Aggregated Volume Before Highest Volume", "Highest Bar Volume Ratio Percentage", "pp", "r1", "r2", "r3", "r4", "r5", "r6", "s1", "s2", "s3", "s4", "s5", "s6", "Target 0%", "Target 25%",
         "Target 50%", "Target 75%", "Target 100%", "Shs Float", "Inst Own", "Short Float", "Insider Own"]
@@ -38,7 +40,7 @@ for ticker in tickers:
         ticker)
     print(f"name {name} ticker {ticker} primary_exchange {primary_exchange} type {type_} list_date {list_date} market_cap {market_cap} share_class_shares_outstanding {share_class_shares_outstanding}")
     time.sleep(sleep_time)
-    today = get_curr_day()
+    curr_day = get_curr_day()
     c, h, l, o, v, vw, n = get_daily_data(ticker)
     print(f"c {c} h {h} l {l} o {o} v {v} vw {vw} n {n}")
     time.sleep(sleep_time)
@@ -69,7 +71,7 @@ for ticker in tickers:
     print(
         f"regular_market_h_timestamp {regular_market_h_timestamp} regular_market_l_timestamp {regular_market_l_timestamp}")
     time.sleep(sleep_time)
-    publisher_name, amp_url, description, keywords = get_news(ticker)
+    publisher_name, amp_url, description, keywords = get_news(ticker,curr_day)
     print(
         f"publisher_name {publisher_name} amp_url {amp_url} description {description} keywords {keywords}")
     target_0, target_25, target_50, target_75, target_100 = get_targets(
@@ -98,3 +100,4 @@ if os.path.exists(filename):
         df.to_excel(writer, sheet_name=curr_day, index=False)
 else:
     df.to_excel(filename, sheet_name=curr_day, index=False)
+

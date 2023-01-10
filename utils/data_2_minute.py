@@ -114,3 +114,5 @@ def get_misc_2_min_data_regular_market(ticker):
     regular_market_l_timestamp = datetime.fromtimestamp(
         regular_market_l_timestamp/1000).strftime('%H:%M:%S')
     return regular_market_h_timestamp, regular_market_l_timestamp
+
+
