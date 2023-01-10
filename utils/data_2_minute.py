@@ -38,9 +38,6 @@ def get_misc_2_min_data_today_till_3_58(ticker):
             break
     highest_v_n = results[highest_v_index]["n"]
     highest_v_timestamp = results[highest_v_index]["t"]
-    # local timestamp
-    highest_v_timestamp = datetime.fromtimestamp(
-        highest_v_timestamp/1000).strftime('%H:%M:%S')
 
     for res in results[:highest_v_index]:
         aggregate_v_before_highest_v += res["v"]
@@ -70,11 +67,6 @@ def get_misc_2_min_data_premarket(ticker):
         if premarket_h == res["h"]:
             premarket_h_timestamp = res["t"]
     premarket_range_percent = 100 - (premarket_l / premarket_h * 100)
-    # convert timestamp to readable time with date,day,month,year,hour,minute,second and time in am/pm
-    premarket_h_timestamp = datetime.fromtimestamp(
-        premarket_h_timestamp/1000).strftime('%H:%M:%S')
-    premarket_l_timestamp = datetime.fromtimestamp(
-        premarket_l_timestamp/1000).strftime('%H:%M:%S')
     daily_volume_forecast = premarket_v_cumulative * 10
     return premarket_v_cumulative, premarket_h, premarket_h_timestamp, premarket_l, premarket_l_timestamp, premarket_range_percent, daily_volume_forecast
 
@@ -108,11 +100,6 @@ def get_misc_2_min_data_regular_market(ticker):
             regular_market_l_timestamp = res["t"]
         if regular_market_h == res["h"]:
             regular_market_h_timestamp = res["t"]
-    # use utc time
-    regular_market_h_timestamp = datetime.fromtimestamp(
-        regular_market_h_timestamp/1000).strftime('%H:%M:%S')
-    regular_market_l_timestamp = datetime.fromtimestamp(
-        regular_market_l_timestamp/1000).strftime('%H:%M:%S')
     return regular_market_h_timestamp, regular_market_l_timestamp
 
 
