@@ -4,8 +4,8 @@ from utils.helpers import *
 
 def get_total_range_percent(ticker):
     curr_day = get_curr_day()
-    from_time = get_timestamp(curr_day, "14:30:00") #2.30pm
-    to_time = get_timestamp(curr_day, "21:00:00") #9pm
+    from_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
+    to_time = get_timestamp(curr_day, "21:00:00")  # 9pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return None
@@ -26,7 +26,7 @@ def get_misc_2_min_data_today_till_3_58(ticker):
     highest_v_n = 0
     aggregate_v_before_highest_v = 0
     from_time = curr_day
-    to_time = get_timestamp(curr_day, "20:58:00") #8.58pm
+    to_time = get_timestamp(curr_day, "20:58:00")  # 8.58pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return [None]*5
@@ -51,7 +51,7 @@ def get_misc_2_min_data_today_till_3_58(ticker):
 def get_misc_2_min_data_premarket(ticker):
     curr_day = get_curr_day()
     from_time = curr_day
-    to_time = get_timestamp(curr_day, "14:30:00") #2.30pm
+    to_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return [None]*7
@@ -76,8 +76,8 @@ def get_misc_2_min_data_premarket(ticker):
 
 def get_misc_2_min_data_first_hour(ticker):
     curr_day = get_curr_day()
-    from_time = get_timestamp(curr_day, "14:30:00") #2.30pm
-    to_time = get_timestamp(curr_day, "15:30:00") #3.30pm
+    from_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
+    to_time = get_timestamp(curr_day, "15:30:00")  # 3.30pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return None
@@ -89,11 +89,11 @@ def get_misc_2_min_data_first_hour(ticker):
 
 def get_misc_2_min_data_regular_market(ticker):
     curr_day = get_curr_day()
-    from_time = get_timestamp(curr_day, "14:30:00") #2.30pm
-    to_time = get_timestamp(curr_day, "21:00:00") #9.00pm
+    from_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
+    to_time = get_timestamp(curr_day, "21:00:00")  # 9.00pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
-        return [None]*2
+        return [None]*4
     regular_market_h_timestamp = None
     regular_market_l_timestamp = None
     regular_market_h = 0
@@ -108,3 +108,37 @@ def get_misc_2_min_data_regular_market(ticker):
     return regular_market_h_timestamp, regular_market_l_timestamp
 
 
+def get_l_after_abs_h(abs_h,abs_h_timestamp, ticker):
+    curr_day = get_curr_day()
+    from_time = abs_h_timestamp
+    to_time = curr_day
+    if not from_time or not abs_h:
+        print(f"abs_h_timestamp is None for {ticker}")
+        return None
+    results = get_2_minute_data(ticker, from_time, to_time)
+    l_after_abs_h = float("inf")
+    if not results:
+        print(f"results is None in get_l_after_abs_h for {ticker}")
+        return None
+    for res in results:
+        l_after_abs_h = min(l_after_abs_h, res["l"])
+    if l_after_abs_h > abs_h:
+        print(f"l_after_abs_h {l_after_abs_h} > abs_h {abs_h} for {ticker} which means that stock did not go down ")
+        return 0
+    return l_after_abs_h
+
+
+def get_abs_h(ticker):
+    curr_day = get_curr_day()
+    from_time = get_timestamp(curr_day, "9:00:00")  # 9.00am
+    to_time = curr_day
+    results = get_2_minute_data(ticker, from_time, to_time)
+    if not results:
+        return [None]*2
+    abs_h = float("-inf")
+    abs_h_timestamp = None
+    for res in results:
+        abs_h = max(abs_h, res["h"])
+        if abs_h == res["h"]:
+            abs_h_timestamp = res["t"]
+    return abs_h, abs_h_timestamp

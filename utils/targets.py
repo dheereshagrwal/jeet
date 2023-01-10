@@ -1,9 +1,10 @@
-def get_targets(prev_c, curr_h, curr_l):
-    if (not prev_c) or (not curr_h) or (not curr_l):
+def get_targets(prev_c, abs_h, l_after_abs_h):
+    if (not prev_c) or (not abs_h) or (not l_after_abs_h):
         return [None]*5
-    range = curr_h - prev_c
-    quartile_percent = 100*(curr_l/range)
+    range = abs_h - prev_c
+    quartile_percent = 100*((abs_h - l_after_abs_h)/range)
     target_0 = target_25 = target_50 = target_75 = target_100 = 0
+    print(f"quartile_percent: {quartile_percent}")
     if quartile_percent < 25:
         target_0 = 1
     elif quartile_percent >= 25 and quartile_percent < 50:
