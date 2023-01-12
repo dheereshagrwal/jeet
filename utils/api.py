@@ -29,9 +29,9 @@ def get_basic_info(ticker):
     except:
         primary_exchange = None
     try:
-        type = result["type"]
+        type_ = result["type"]
     except:
-        type = None
+        type_ = None
     try:
         list_date = result["list_date"]
     except:
@@ -44,7 +44,7 @@ def get_basic_info(ticker):
         share_class_shares_outstanding = result["share_class_shares_outstanding"]
     except:
         share_class_shares_outstanding = None
-    return name, ticker, primary_exchange, type, list_date, market_cap, share_class_shares_outstanding
+    return name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding
 
 
 def get_news(ticker, curr_day):
