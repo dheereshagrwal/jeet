@@ -1,6 +1,7 @@
 
 # get apiKey from .env file
 
+from utils.helpers import *
 from datetime import date, datetime
 import requests
 import pandas as pd
@@ -8,8 +9,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 apiKey = os.getenv("apiKey")
-from utils.helpers import *
-
 
 
 def get_response(url):
@@ -34,7 +33,7 @@ def get_basic_info(ticker):
     return name, ticker, primary_exchange, type, list_date, market_cap, share_class_shares_outstanding
 
 
-def get_news(ticker,curr_day):
+def get_news(ticker, curr_day):
     resp = get_response(
         f"https://api.polygon.io/v2/reference/news?published_utc={curr_day}&ticker={ticker}&apiKey={apiKey}")
     try:
@@ -58,7 +57,10 @@ def get_news(ticker,curr_day):
         print(f"amp_url: {amp_url}")
         description = result["description"]
         print(f"description: {description}")
-        keywords = result["keywords"]
+        try:
+            keywords = result["keywords"]
+        except:
+            keywords = None
         print(f"keywords: {keywords}")
     return publisher_name, amp_url, description, keywords
 
