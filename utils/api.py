@@ -2,9 +2,7 @@
 # get apiKey from .env file
 
 from utils.helpers import *
-from datetime import date, datetime
 import requests
-import pandas as pd
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -23,13 +21,29 @@ def get_basic_info(ticker):
         result = resp.json()["results"]
     except:
         return [None]*7
+    # absolute fields - name, ticker
     name = result["name"]
     ticker = result["ticker"]
-    primary_exchange = result["primary_exchange"]
-    type = result["type"]
-    list_date = result["list_date"]
-    market_cap = result["market_cap"]
-    share_class_shares_outstanding = result["share_class_shares_outstanding"]
+    try:
+        primary_exchange = result["primary_exchange"]
+    except:
+        primary_exchange = None
+    try:
+        type = result["type"]
+    except:
+        type = None
+    try:
+        list_date = result["list_date"]
+    except:
+        list_date = None
+    try:    
+        market_cap = result["market_cap"]
+    except:
+        market_cap = None
+    try:
+        share_class_shares_outstanding = result["share_class_shares_outstanding"]
+    except:
+        share_class_shares_outstanding = None
     return name, ticker, primary_exchange, type, list_date, market_cap, share_class_shares_outstanding
 
 
@@ -42,27 +56,30 @@ def get_news(ticker, curr_day):
         return [None]*4
     result = None
     publisher_name = None
-    amp_url = None
+    article_url = None
     description = None
     keywords = None
     for res in results:
         if len(res["tickers"]) == 1:
             result = res
             break
-
+    # absolute fields - publisher_name, article_url
     if result:
         publisher_name = result["publisher"]["name"]
         print(f"publisher_name: {publisher_name}")
-        amp_url = result["amp_url"]
-        print(f"amp_url: {amp_url}")
-        description = result["description"]
+        article_url = result["article_url"]
+        print(f"article_url: {article_url}")
+        try:
+            description = result["description"]
+        except:
+            description = None
         print(f"description: {description}")
         try:
             keywords = result["keywords"]
         except:
             keywords = None
         print(f"keywords: {keywords}")
-    return publisher_name, amp_url, description, keywords
+    return publisher_name, article_url, description, keywords
 
 
 def get_daily_data(ticker):

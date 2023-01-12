@@ -15,8 +15,8 @@ print(f"sleep_time is {sleep_time}")
 
 
 cols = ["name", "ticker", "primary_exchange", "list_date", "type",
-        "market_cap", "share_class_shares_outstanding", "publisher_name", "amp_url", "description", "keywords", "Cash In Hand(M)", "Cash Need", "DT Overall Risk", "DT offering Ability", "DT Amt Excluding Shelf", "DT Historical", "c", "h", "l", "o", "v", "vw", "Total Range %", "Gap %", "Premarket Volume (cumm)", "Premarket High", "Premarket High Time", "Premarket Low", "Premarket Low Time", "Premarket Range %",  "Daily Volume Forecast", "First Hour Volume", "Regular Market High Time", "Regular Market Low Time", "Highest Volume Time", "Highest Volume Time - num_trans", "Highest Volume", "Aggregated Volume Before Highest Volume", "Highest Bar Volume Ratio Percentage", "pp", "r1", "r2", "r3", "r4", "r5", "r6", "s1", "s2", "s3", "s4", "s5", "s6", "Target 0%", "Target 25%",
-        "Target 50%", "Target 75%", "Target 100%", "Shs Float", "Inst Own", "Short Float", "Insider Own","ATR"]
+        "market_cap", "share_class_shares_outstanding", "publisher_name", "article_url", "description", "keywords", "Cash In Hand(M)", "Cash Need", "DT Overall Risk", "DT offering Ability", "DT Amt Excluding Shelf", "DT Historical", "c", "h", "l", "o", "v", "vw", "Total Range %", "Gap %", "Premarket Volume (cumm)", "Premarket High", "Premarket High Time", "Premarket Low", "Premarket Low Time", "Premarket Range %",  "Daily Volume Forecast", "First Hour Volume", "Regular Market High Time", "Regular Market Low Time", "Highest Volume Time", "Highest Volume Time - num_trans", "Highest Volume", "Aggregated Volume Before Highest Volume", "Highest Bar Volume Ratio Percentage", "pp", "r1", "r2", "r3", "r4", "r5", "r6", "s1", "s2", "s3", "s4", "s5", "s6", "Target 0%", "Target 25%",
+        "Target 50%", "Target 75%", "Target 100%", "Shs Float", "Inst Own", "Short Float", "Insider Own", "ATR"]
 
 try:
     file = open("tickers.txt", "r")
@@ -65,30 +65,32 @@ for ticker in tickers:
     print(f"first_hour_v {first_hour_v}")
     time.sleep(sleep_time)
     # get regular market high and low timestamps
-    regular_market_h_timestamp, regular_market_l_timestamp= get_misc_2_min_data_regular_market(
+    regular_market_h_timestamp, regular_market_l_timestamp = get_misc_2_min_data_regular_market(
         ticker)
-    print(f"regular_market_h_timestamp {regular_market_h_timestamp} regular_market_l_timestamp {regular_market_l_timestamp}")
-    time.sleep(sleep_time)
-    publisher_name, amp_url, description, keywords = get_news(ticker, curr_day)
     print(
-        f"publisher_name {publisher_name} amp_url {amp_url} description {description} keywords {keywords}")
-    abs_h,abs_h_timestamp = get_abs_h(ticker)
+        f"regular_market_h_timestamp {regular_market_h_timestamp} regular_market_l_timestamp {regular_market_l_timestamp}")
+    time.sleep(sleep_time)
+    publisher_name, article_url, description, keywords = get_news(
+        ticker, curr_day)
+    print(
+        f"publisher_name {publisher_name} article_url {article_url} description {description} keywords {keywords}")
+    abs_h, abs_h_timestamp = get_abs_h(ticker)
     print(f"abs_h {abs_h} abs_h_timestamp {abs_h_timestamp}")
-    l_after_abs_h = get_l_after_abs_h(abs_h,abs_h_timestamp,ticker)
+    l_after_abs_h = get_l_after_abs_h(abs_h, abs_h_timestamp, ticker)
     print(f"l_after_abs_h {l_after_abs_h}")
     target_0, target_25, target_50, target_75, target_100 = get_targets(
         prev_c, abs_h, l_after_abs_h)
     print(
         f"target_0 {target_0} target_25 {target_25} target_50 {target_50} target_75 {target_75} target_100 {target_100}")
-    shs_float, inst_own, short_float_percent, insider_own,atr = get_finviz_data(
+    shs_float, inst_own, short_float_percent, insider_own, atr = get_finviz_data(
         ticker)
     print(f"shs_float {shs_float} inst_own {inst_own} short_float_percent {short_float_percent} insider_own {insider_own} atr {atr}")
 
     # use concat to add new row to df
     try:
         df = pd.concat([df, pd.DataFrame([[name, ticker, primary_exchange, list_date, type_,
-                                           market_cap, share_class_shares_outstanding, publisher_name, amp_url, description, keywords, cash_in_hand, cash_need, dt_overall_risk, dt_offering_ability, dt_amount_exceeding_shelf, dt_historical, c, h, l, o, v, vw, total_range_percent, gap_percent, premarket_v_cumulative, premarket_h, premarket_h_timestamp, premarket_l, premarket_l_timestamp, premarket_range_percent, daily_volume_forecast, first_hour_v, regular_market_h_timestamp, regular_market_l_timestamp, highest_v_timestamp, highest_v_n, highest_v, aggregate_v_before_highest_v, highest_bar_v_ratio_percent,
-                        pp, r1, r2, r3, r4, r5, r6, s1, s2, s3, s4, s5, s6, target_0, target_25, target_50, target_75, target_100, shs_float, inst_own, short_float_percent, insider_own,atr]], columns=cols)], ignore_index=True)
+                                           market_cap, share_class_shares_outstanding, publisher_name, article_url, description, keywords, cash_in_hand, cash_need, dt_overall_risk, dt_offering_ability, dt_amount_exceeding_shelf, dt_historical, c, h, l, o, v, vw, total_range_percent, gap_percent, premarket_v_cumulative, premarket_h, premarket_h_timestamp, premarket_l, premarket_l_timestamp, premarket_range_percent, daily_volume_forecast, first_hour_v, regular_market_h_timestamp, regular_market_l_timestamp, highest_v_timestamp, highest_v_n, highest_v, aggregate_v_before_highest_v, highest_bar_v_ratio_percent,
+                        pp, r1, r2, r3, r4, r5, r6, s1, s2, s3, s4, s5, s6, target_0, target_25, target_50, target_75, target_100, shs_float, inst_own, short_float_percent, insider_own, atr]], columns=cols)], ignore_index=True)
     except:
         print("Error in concat")
 
