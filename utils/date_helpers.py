@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -28,3 +29,8 @@ def get_prev_day():
         return prev_day
     except:
         print("prev_day not found in .env file")
+
+
+def convert_millis_to_local_datetime(millis):
+    date = datetime.fromtimestamp(millis/1000)
+    return date

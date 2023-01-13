@@ -1,7 +1,7 @@
 
 # get apiKey from .env file
 
-from utils.helpers import *
+from utils.date_helpers import *
 import requests
 import os
 from dotenv import load_dotenv
@@ -67,8 +67,6 @@ def get_news(ticker, curr_day):
     if result:
         publisher_name = result["publisher"]["name"]
         print(f"publisher_name: {publisher_name}")
-        article_url = result["article_url"]
-        print(f"article_url: {article_url}")
         try:
             description = result["description"]
         except:
@@ -79,7 +77,7 @@ def get_news(ticker, curr_day):
         except:
             keywords = None
         print(f"keywords: {keywords}")
-    return publisher_name, article_url, description, keywords
+    return publisher_name, description, keywords
 
 
 def get_daily_data(ticker):

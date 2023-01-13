@@ -1,5 +1,5 @@
 from utils.api import *
-from utils.helpers import *
+from utils.date_helpers import *
 
 
 def get_total_range_percent(ticker):
@@ -122,9 +122,9 @@ def get_l_after_abs_h(abs_h,abs_h_timestamp, ticker):
         return None
     for res in results:
         l_after_abs_h = min(l_after_abs_h, res["l"])
-    if l_after_abs_h > abs_h:
-        print(f"l_after_abs_h {l_after_abs_h} > abs_h {abs_h} for {ticker} which means that stock did not go down ")
-        return 0
+    # if l_after_abs_h > abs_h:
+    #     print(f"l_after_abs_h {l_after_abs_h} > abs_h {abs_h} for {ticker} which means that stock did not go down ")
+    #     return 0
     return l_after_abs_h
 
 
