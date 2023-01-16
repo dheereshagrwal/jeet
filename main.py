@@ -10,7 +10,7 @@ from utils.targets import *
 from utils.finviz import *
 from utils.ft import *
 from dotenv import load_dotenv
-from numerize import numerize
+from numerize_denumerize import numerize
 load_dotenv()
 sleep_time = int(os.getenv("sleep_time"))
 print(f"sleep_time is {sleep_time}")
@@ -20,10 +20,20 @@ try:
     file = open("tickers.txt", "r")
     tickers = file.readlines()
     file.close()
-    # remove new line character from each ticker
+    # remove whitespace  from each ticker
     tickers = [x.strip().upper() for x in tickers]
 except:
     print('tickers.txt does not exist, quitting....')
+    exit()
+
+try:
+    file = open("keywords.txt", "r")
+    keywords = file.readlines()
+    file.close()
+    # remove whitespace from each keyword
+    keywords = [x.strip() for x in keywords]
+except:
+    print('keywords.txt does not exist, quitting....')
     exit()
 
 df = pd.DataFrame()
@@ -150,7 +160,7 @@ for ticker in tickers:
     try:
 
         data = {'prev_day': prev_day, 'curr_day': curr_day,  'ticker': ticker, 'Shs Float': shs_float, 'Inst Own': inst_own, 'Insider Own': insider_own, 'market_cap': market_cap, 'Short Float': short_float_percent, 'ATR': atr, 'PDC Range %': pdc_range_percent,'total_range_percent': total_range_percent, 'premarket_range_percent': premarket_range_percent, 'gap_percent': gap_percent, 'Cash In Hand': cash_in_hand, 'Cash Need': cash_need, 'DT Overall Risk': dt_overall_risk, 'DT Offering Ability': dt_offering_ability, 'DT Amount Excluding Shelf': dt_amount_exceeding_shelf, 'DT Historical': dt_historical, 'Daily FT %': daily_ft_percent, 'PM FT %': pm_ft_percent, 'First Hour FT %': first_hour_ft_percent, 'v': v,  'Premarket Volume (cumm)': premarket_v_cumulative, 'First Hour Volume': first_hour_v, 'Daily Volume Forecast': daily_volume_forecast, 'Highest Volume': highest_v,  'Highest Volume Time - num_trans': highest_v_n,  'Aggregated Volume Before Highest Volume': aggregate_v_before_highest_v, 'Highest Bar Volume Ratio %': highest_bar_v_ratio_percent, 'c': c, 'h': h, 'l': l, 'o': o,  'vw': vw,  'Target 0%': target_0, 'Target 25%': target_25, 'Target 50%': target_50, 'Target 75%': target_75, 'Target 100%': target_100, 'Premarket High': premarket_h, 'Premarket Low': premarket_l, 'Premarket High Time': premarket_h_timestamp,
-                'Premarket Low Time': premarket_l_timestamp,  'Regular Market High Time': regular_market_h_timestamp, 'Regular Market Low Time': regular_market_l_timestamp,  'Highest Volume Time': highest_v_timestamp,  'name': name, 'primary_exchange': primary_exchange, 'list_date': list_date, 'type': type_, 'share_class_shares_outstanding': share_class_shares_outstanding, 'descriptions': descriptions, 'pp': pp, 'r4': r4, 'r5': r5, 'r6': r6, 's4': s4, 's5': s5, 's6': s6}
+                'Premarket Low Time': premarket_l_timestamp,  'Regular Market High Time': regular_market_h_timestamp, 'Regular Market Low Time': regular_market_l_timestamp,  'Highest Volume Time': highest_v_timestamp,  'name': name, 'primary_exchange': primary_exchange, 'list_date': list_date, 'type': type_, 'share_class_shares_outstanding': share_class_shares_outstanding, 'keywords':keywords,'descriptions': descriptions, 'pp': pp, 'r4': r4, 'r5': r5, 'r6': r6, 's4': s4, 's5': s5, 's6': s6}
         df = pd.concat([df, pd.DataFrame([data])])
     except:
         print("Error in concat")

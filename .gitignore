@@ -171,5 +171,7 @@ poetry.toml
 data.xlsx
 #add tickers.txt to gitignore
 tickers.txt
+#add keywords.txt to gitignore
+keywords.txt
 
 # End of https://www.toptal.com/developers/gitignore/api/python
