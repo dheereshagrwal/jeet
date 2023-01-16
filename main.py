@@ -156,7 +156,7 @@ for ticker in tickers:
         first_hour_v = numerize.numerize(first_hour_v, 2)
     if premarket_v_cumulative:
         premarket_v_cumulative = numerize.numerize(premarket_v_cumulative, 2)
-    descriptions = get_descriptions(ticker,curr_day)
+    descriptions = get_descriptions(ticker,curr_day) 
     try:
 
         data = {'prev_day': prev_day, 'curr_day': curr_day,  'ticker': ticker, 'Shs Float': shs_float, 'Inst Own': inst_own, 'Insider Own': insider_own, 'market_cap': market_cap, 'Short Float': short_float_percent, 'ATR': atr, 'PDC Range %': pdc_range_percent,'total_range_percent': total_range_percent, 'premarket_range_percent': premarket_range_percent, 'gap_percent': gap_percent, 'Cash In Hand': cash_in_hand, 'Cash Need': cash_need, 'DT Overall Risk': dt_overall_risk, 'DT Offering Ability': dt_offering_ability, 'DT Amount Excluding Shelf': dt_amount_exceeding_shelf, 'DT Historical': dt_historical, 'Daily FT %': daily_ft_percent, 'PM FT %': pm_ft_percent, 'First Hour FT %': first_hour_ft_percent, 'v': v,  'Premarket Volume (cumm)': premarket_v_cumulative, 'First Hour Volume': first_hour_v, 'Daily Volume Forecast': daily_volume_forecast, 'Highest Volume': highest_v,  'Highest Volume Time - num_trans': highest_v_n,  'Aggregated Volume Before Highest Volume': aggregate_v_before_highest_v, 'Highest Bar Volume Ratio %': highest_bar_v_ratio_percent, 'c': c, 'h': h, 'l': l, 'o': o,  'vw': vw,  'Target 0%': target_0, 'Target 25%': target_25, 'Target 50%': target_50, 'Target 75%': target_75, 'Target 100%': target_100, 'Premarket High': premarket_h, 'Premarket Low': premarket_l, 'Premarket High Time': premarket_h_timestamp,
