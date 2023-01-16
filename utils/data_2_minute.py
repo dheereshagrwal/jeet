@@ -14,7 +14,7 @@ def get_total_range_percent(ticker):
     for res in results:
         max_h = max(max_h, res["h"])
         min_l = min(min_l, res["l"])
-    total_range_percent = 100 - (min_l/max_h * 100)
+    total_range_percent = 100*(max_h - min_l)/min_l
     return total_range_percent
 
 
@@ -69,7 +69,7 @@ def get_misc_2_min_data_premarket(ticker):
             premarket_l_timestamp = res["t"]
         if premarket_h == res["h"]:
             premarket_h_timestamp = res["t"]
-    premarket_range_percent = 100 - (premarket_l / premarket_h * 100)
+    premarket_range_percent = 100*(premarket_h - premarket_l)/premarket_l
     daily_volume_forecast = premarket_v_cumulative * 10
     return premarket_v_cumulative, premarket_h, premarket_h_timestamp, premarket_l, premarket_l_timestamp, premarket_range_percent, daily_volume_forecast
 
@@ -108,7 +108,7 @@ def get_misc_2_min_data_regular_market(ticker):
     return regular_market_h_timestamp, regular_market_l_timestamp
 
 
-def get_l_after_abs_h(abs_h,abs_h_timestamp, ticker):
+def get_l_after_abs_h(abs_h, abs_h_timestamp, ticker):
     curr_day = get_curr_day()
     from_time = abs_h_timestamp
     to_time = curr_day

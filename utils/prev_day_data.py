@@ -10,7 +10,7 @@ def get_misc_prev_day_data(ticker, today_o):
         prev_h = result["h"]
         prev_l = result["l"]
         if today_o:
-            gap_percent = 100 - (prev_c/today_o * 100)
+            gap_percent = 100*(today_o - prev_c)/prev_c
     # get pivot points
     if result:
         pp,  r4, r5, r6,  s4, s5, s6 = get_pivot_points(prev_c, prev_h, prev_l)
