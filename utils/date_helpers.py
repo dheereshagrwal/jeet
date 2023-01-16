@@ -31,6 +31,7 @@ def get_prev_day():
         print("prev_day not found in .env file")
 
 
-def convert_millis_to_local_datetime(millis):
-    date = datetime.fromtimestamp(millis/1000)
-    return date
+def convert_millis_to_local_time(millis):
+    #I want only the local time, not the date
+    time = datetime.fromtimestamp(millis/1000).strftime("%H:%M:%S")
+    return time

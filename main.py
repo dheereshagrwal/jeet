@@ -26,7 +26,6 @@ except:
     print('tickers.txt does not exist, quitting....')
     exit()
 
-
 df = pd.DataFrame()
 for ticker in tickers:
     print(f"ticker is {ticker}")
@@ -38,6 +37,9 @@ for ticker in tickers:
     print(f"name {name} ticker {ticker} primary_exchange {primary_exchange} type {type_} list_date {list_date} market_cap {market_cap} share_class_shares_outstanding {share_class_shares_outstanding}")
     if market_cap:
         market_cap = numerize.numerize(market_cap, 2)
+    if share_class_shares_outstanding:
+        share_class_shares_outstanding = numerize.numerize(
+            share_class_shares_outstanding, 2)
     time.sleep(sleep_time)
     curr_day = get_curr_day()
     prev_day = get_prev_day()
@@ -47,12 +49,14 @@ for ticker in tickers:
     time.sleep(sleep_time)
     # get previous day misc data
     # if we did not get daily data that means o is None, we will handle that case
-    gap_percent, pp, r4, r5, r6, s4, s5, s6, prev_c = get_misc_prev_day_data(
-        ticker, o)
+    gap_percent, pdc_range_percent, pp, r4, r5, r6, s4, s5, s6, prev_c = get_misc_prev_day_data(
+        ticker, o, h)
     print(
-        f"gap_percent {gap_percent} pp {pp} r4 {r4} r5 {r5} r6 {r6} s4 {s4} s5 {s5} s6 {s6} prev_c {prev_c}")
+        f"gap_percent {gap_percent} pdc_range_percent {pdc_range_percent} pp {pp} r4 {r4} r5 {r5} r6 {r6} s4 {s4} s5 {s5} s6 {s6} prev_c {prev_c}")
     if gap_percent:
         gap_percent = round(gap_percent, 2)
+    if pdc_range_percent:
+        pdc_range_percent = round(pdc_range_percent, 2)
     if pp:
         pp = round(pp, 2)
         r4 = round(r4, 2)
@@ -79,7 +83,7 @@ for ticker in tickers:
     if highest_v:
         highest_v = numerize.numerize(highest_v, 2)
     if highest_v_timestamp:
-        highest_v_timestamp = convert_millis_to_local_datetime(
+        highest_v_timestamp = convert_millis_to_local_time(
             highest_v_timestamp)
     time.sleep(sleep_time)
     premarket_v_cumulative, premarket_h, premarket_h_timestamp, premarket_l, premarket_l_timestamp, premarket_range_percent, daily_volume_forecast = get_misc_2_min_data_premarket(
@@ -91,10 +95,10 @@ for ticker in tickers:
     if premarket_range_percent:
         premarket_range_percent = round(premarket_range_percent, 2)
     if premarket_h_timestamp:
-        premarket_h_timestamp = convert_millis_to_local_datetime(
+        premarket_h_timestamp = convert_millis_to_local_time(
             premarket_h_timestamp)
     if premarket_l_timestamp:
-        premarket_l_timestamp = convert_millis_to_local_datetime(
+        premarket_l_timestamp = convert_millis_to_local_time(
             premarket_l_timestamp)
     time.sleep(sleep_time)
     first_hour_v = get_misc_2_min_data_first_hour(ticker)
@@ -106,17 +110,13 @@ for ticker in tickers:
     print(
         f"regular_market_h_timestamp {regular_market_h_timestamp} regular_market_l_timestamp {regular_market_l_timestamp}")
     if regular_market_h_timestamp:
-        regular_market_h_timestamp = convert_millis_to_local_datetime(
+        regular_market_h_timestamp = convert_millis_to_local_time(
             regular_market_h_timestamp)
     if regular_market_l_timestamp:
-        regular_market_l_timestamp = convert_millis_to_local_datetime(
+        regular_market_l_timestamp = convert_millis_to_local_time(
             regular_market_l_timestamp)
 
     time.sleep(sleep_time)
-    publisher_name, description, keywords = get_news(
-        ticker, curr_day)
-    print(
-        f"publisher_name {publisher_name} description {description} keywords {keywords}")
     abs_h, abs_h_timestamp = get_abs_h(ticker)
     print(f"abs_h {abs_h} abs_h_timestamp {abs_h_timestamp}")
     l_after_abs_h = get_l_after_abs_h(abs_h, abs_h_timestamp, ticker)
@@ -146,10 +146,11 @@ for ticker in tickers:
         first_hour_v = numerize.numerize(first_hour_v, 2)
     if premarket_v_cumulative:
         premarket_v_cumulative = numerize.numerize(premarket_v_cumulative, 2)
+    descriptions = get_descriptions(ticker,curr_day)
     try:
 
-        data = {'prev_day': prev_day, 'curr_day': curr_day,  'ticker': ticker, 'Shs Float': shs_float, 'Inst Own': inst_own, 'Insider Own': insider_own, 'market_cap': market_cap, 'Short Float': short_float_percent, 'ATR': atr, 'total_range_percent': total_range_percent, 'premarket_range_percent': premarket_range_percent, 'gap_percent': gap_percent, 'keywords': keywords, 'Cash In Hand': cash_in_hand, 'Cash Need': cash_need, 'DT Overall Risk': dt_overall_risk, 'DT Offering Ability': dt_offering_ability, 'DT Amount Excluding Shelf': dt_amount_exceeding_shelf, 'DT Historical': dt_historical, 'Daily FT %': daily_ft_percent, 'PM FT %': pm_ft_percent, 'First Hour FT %': first_hour_ft_percent, 'v': v,  'Premarket Volume (cumm)': premarket_v_cumulative, 'First Hour Volume': first_hour_v, 'Daily Volume Forecast': daily_volume_forecast, 'Highest Volume': highest_v,  'Highest Volume Time - num_trans': highest_v_n,  'Aggregated Volume Before Highest Volume': aggregate_v_before_highest_v, 'Highest Bar Volume Ratio %': highest_bar_v_ratio_percent, 'c': c, 'h': h, 'l': l, 'o': o,  'vw': vw,  'Target 0%': target_0, 'Target 25%': target_25, 'Target 50%': target_50, 'Target 75%': target_75, 'Target 100%': target_100, 'Premarket High': premarket_h, 'Premarket Low': premarket_l, 'Premarket High Time': premarket_h_timestamp,
-                'Premarket Low Time': premarket_l_timestamp,  'Regular Market High Time': regular_market_h_timestamp, 'Regular Market Low Time': regular_market_l_timestamp,  'Highest Volume Time': highest_v_timestamp,  'name': name, 'primary_exchange': primary_exchange, 'list_date': list_date, 'type': type_, 'shares_class_shares_outstanding': share_class_shares_outstanding, 'publisher_name': publisher_name, 'description': description, 'pp': pp, 'r4': r4, 'r5': r5, 'r6': r6, 's4': s4, 's5': s5, 's6': s6}
+        data = {'prev_day': prev_day, 'curr_day': curr_day,  'ticker': ticker, 'Shs Float': shs_float, 'Inst Own': inst_own, 'Insider Own': insider_own, 'market_cap': market_cap, 'Short Float': short_float_percent, 'ATR': atr, 'PDC Range %': pdc_range_percent,'total_range_percent': total_range_percent, 'premarket_range_percent': premarket_range_percent, 'gap_percent': gap_percent, 'Cash In Hand': cash_in_hand, 'Cash Need': cash_need, 'DT Overall Risk': dt_overall_risk, 'DT Offering Ability': dt_offering_ability, 'DT Amount Excluding Shelf': dt_amount_exceeding_shelf, 'DT Historical': dt_historical, 'Daily FT %': daily_ft_percent, 'PM FT %': pm_ft_percent, 'First Hour FT %': first_hour_ft_percent, 'v': v,  'Premarket Volume (cumm)': premarket_v_cumulative, 'First Hour Volume': first_hour_v, 'Daily Volume Forecast': daily_volume_forecast, 'Highest Volume': highest_v,  'Highest Volume Time - num_trans': highest_v_n,  'Aggregated Volume Before Highest Volume': aggregate_v_before_highest_v, 'Highest Bar Volume Ratio %': highest_bar_v_ratio_percent, 'c': c, 'h': h, 'l': l, 'o': o,  'vw': vw,  'Target 0%': target_0, 'Target 25%': target_25, 'Target 50%': target_50, 'Target 75%': target_75, 'Target 100%': target_100, 'Premarket High': premarket_h, 'Premarket Low': premarket_l, 'Premarket High Time': premarket_h_timestamp,
+                'Premarket Low Time': premarket_l_timestamp,  'Regular Market High Time': regular_market_h_timestamp, 'Regular Market Low Time': regular_market_l_timestamp,  'Highest Volume Time': highest_v_timestamp,  'name': name, 'primary_exchange': primary_exchange, 'list_date': list_date, 'type': type_, 'share_class_shares_outstanding': share_class_shares_outstanding, 'descriptions': descriptions, 'pp': pp, 'r4': r4, 'r5': r5, 'r6': r6, 's4': s4, 's5': s5, 's6': s6}
         df = pd.concat([df, pd.DataFrame([data])])
     except:
         print("Error in concat")

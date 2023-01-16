@@ -47,38 +47,31 @@ def get_basic_info(ticker):
     return name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding
 
 
-def get_news(ticker, curr_day):
+def get_descriptions(ticker, curr_day):
     resp = get_response(
         f"https://api.polygon.io/v2/reference/news?published_utc={curr_day}&ticker={ticker}&apiKey={apiKey}")
+    pattern = re.compile(r'\([A-Za-z]+\s*:\s*' + ticker + '\)')
     try:
         results = resp.json()["results"]
+        descriptions = ""
     except:
-        return [None]*4
-    result = None
-    publisher_name = None
-    article_url = None
-    description = None
-    keywords = None
-    for res in results:
-        if len(res["tickers"]) == 1:
-            result = res
-            break
-    # absolute fields - publisher_name, article_url
-    if result:
-        publisher_name = result["publisher"]["name"]
-        print(f"publisher_name: {publisher_name}")
+        return None
+    for result in results:
         try:
+            #the property description might not exist
             description = result["description"]
+            #replace the character \xa0 with a space
+            description = description.replace("\xa0", " ")
+            description = description.split("\n")
+            description = list(filter(None, description))
+            description = [x.strip() for x in description]
+            matches_index = [i for i,s in enumerate(description) if pattern.search(s)]
+            for match_index in matches_index[:-1]:
+                descriptions += description[match_index] + "\n"
+            descriptions += description[matches_index[-1]]
         except:
-            description = None
-        print(f"description: {description}")
-        try:
-            keywords = result["keywords"]
-        except:
-            keywords = None
-        print(f"keywords: {keywords}")
-    return publisher_name, description, keywords
-
+            pass
+    return descriptions
 
 def get_daily_data(ticker):
     curr_day = get_curr_day()
@@ -119,3 +112,17 @@ def get_prev_day_data(ticker):
         return None
     result = results[0]
     return result
+
+
+
+import re
+def get_result_from_single_description(ticker,description):
+    #split description according to '\n'
+    description = description.split('\n')
+    description = list(filter(None, description))
+    description = [x.strip() for x in description]
+    print(f"len of description: {len(description)} and description: {description}")
+    pattern = re.compile(r'\([A-Za-z]+\s*:\s*' + ticker + '\)')
+    result = [i for i in description if pattern.search(i)]
+    print(f"result: {result}")
+
