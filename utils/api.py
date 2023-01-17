@@ -2,6 +2,7 @@
 # get apiKey from .env file
 
 from utils.date_helpers import *
+# from date_helpers import *
 import requests
 import os
 from dotenv import load_dotenv
@@ -46,7 +47,7 @@ def get_basic_info(ticker):
         share_class_shares_outstanding = None
     return name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding
 
-
+'''
 def get_descriptions(ticker, curr_day):
     resp = get_response(
         f"https://api.polygon.io/v2/reference/news?published_utc={curr_day}&ticker={ticker}&apiKey={apiKey}")
@@ -66,12 +67,12 @@ def get_descriptions(ticker, curr_day):
             description = list(filter(None, description))
             description = [x.strip() for x in description]
             matches_index = [i for i,s in enumerate(description) if pattern.search(s)]
-            for match_index in matches_index[:-1]:
-                descriptions += description[match_index] + "\n"
-            descriptions += description[matches_index[-1]]
+            descriptions += description[match_index] + "\n"
+            
         except:
             pass
-    return descriptions
+    return descriptions[:-1]
+'''
 
 def get_daily_data(ticker):
     curr_day = get_curr_day()
@@ -126,3 +127,32 @@ def get_result_from_single_description(ticker,description):
     result = [i for i in description if pattern.search(i)]
     print(f"result: {result}")
 
+import yfinance as yf
+def get_news(ticker):
+    try:
+        news = yf.Ticker(ticker).news
+        print(f"news: {news}")
+        if not news:
+            print(f"news does not exist for {ticker}")
+            return [None]*2
+    except:
+        print(f"news does not exist for {ticker}")
+        return [None]*2
+    publishers = ""
+    titles = []
+    prev_day = get_prev_day()
+    curr_day = get_curr_day()
+    print(f"prev_day: {prev_day} and curr_day: {curr_day}")
+    for n in news:
+        try:
+            providerPublishTime = n["providerPublishTime"]
+            published_date = convert_seconds_to_utc_date(providerPublishTime)
+            # if published_date is either prev_day or curr_day, then add title to titles and publisher to publishers
+            if published_date == prev_day or published_date == curr_day:
+                publisher = n["publisher"]
+                title = n["title"]
+                publishers += publisher + "\n"
+                titles.append(title)
+        except:
+            continue
+    return publishers[:-1], titles

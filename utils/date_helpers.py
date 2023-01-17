@@ -35,3 +35,8 @@ def convert_millis_to_local_time(millis):
     #I want only the local time, not the date
     time = datetime.fromtimestamp(millis/1000).strftime("%H:%M:%S")
     return time
+
+
+def convert_seconds_to_utc_date(seconds):
+    #convert to utc not to local time
+    return datetime.utcfromtimestamp(seconds).strftime('%Y-%m-%d')

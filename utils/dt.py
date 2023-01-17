@@ -30,7 +30,7 @@ def get_dilution_data(ticker):
     ticker_url = "https://dilutiontracker.com/app/search/"+ticker
     driver.get(ticker_url)
 
-    time.sleep(10)
+    time.sleep(7)
     try:
         cash_need = driver.find_element(
             "xpath", '//*[@id="dashContentWrapper"]/div[2]/div[5]/span[2]')
