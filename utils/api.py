@@ -88,8 +88,14 @@ def get_daily_data(ticker):
     l = result["l"]
     o = result["o"]
     v = result["v"]
-    vw = result["vw"]
-    n = result["n"]
+    try:
+        vw = result["vw"]
+    except:
+        vw = None
+    try:
+        n = result["n"]
+    except:
+        n = None
     return c, h, l, o, v, vw, n
 
 
