@@ -115,11 +115,12 @@ def get_prev_day_data(ticker):
     prev_day = get_prev_day()
     resp = get_response(
         f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{prev_day}/{prev_day}?adjusted=true&sort=asc&apiKey={apiKey}")
+    result = None
     try:
         results = resp.json()["results"]
+        result = results[0]
     except:
-        return None
-    result = results[0]
+        pass
     return result
 
 
