@@ -20,7 +20,8 @@ def get_curr_day():
         curr_day = os.getenv("curr_day")
         return curr_day
     except:
-        print("curr_day not found in .env file")
+        print("curr_day not found in .env file, exiting...")
+        exit()
 
 
 def get_prev_day():
@@ -28,7 +29,8 @@ def get_prev_day():
         prev_day = os.getenv("prev_day")
         return prev_day
     except:
-        print("prev_day not found in .env file")
+        print("prev_day not found in .env file, exiting...")
+        exit()
 
 
 def convert_millis_to_local_time(millis):
