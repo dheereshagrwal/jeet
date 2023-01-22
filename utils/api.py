@@ -103,10 +103,11 @@ def get_daily_data(ticker):
 def get_2_minute_data(ticker, from_time, to_time):
     resp = get_response(
         f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/2/minute/{from_time}/{to_time}?adjusted=true&sort=asc&apiKey={apiKey}")
+    results = None
     try:
         results = resp.json()["results"]
     except:
-        return None
+        pass
     return results
 
 
