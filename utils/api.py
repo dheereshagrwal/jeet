@@ -18,33 +18,34 @@ def get_response(url):
 def get_basic_info(ticker):
     resp = get_response(
         f"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={apiKey}")
+    name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding = None, None, None, None, None, None, None
     try:
         result = resp.json()["results"]
     except:
-        return [None]*7
+        return name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding
     # absolute fields - name, ticker
     name = result["name"]
     ticker = result["ticker"]
     try:
         primary_exchange = result["primary_exchange"]
     except:
-        primary_exchange = None
+        pass
     try:
         type_ = result["type"]
     except:
-        type_ = None
+        pass
     try:
         list_date = result["list_date"]
     except:
-        list_date = None
-    try:    
+        pass
+    try:
         market_cap = result["market_cap"]
     except:
-        market_cap = None
+        pass
     try:
         share_class_shares_outstanding = result["share_class_shares_outstanding"]
     except:
-        share_class_shares_outstanding = None
+        pass
     return name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding
 
 '''
@@ -78,10 +79,11 @@ def get_daily_data(ticker):
     curr_day = get_curr_day()
     resp = get_response(
         f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{curr_day}/{curr_day}?adjusted=true&sort=asc&apiKey={apiKey}")
+    c, h, l, o, v, vw, n = None, None, None, None, None, None, None
     try:
         results = resp.json()["results"]
     except:
-        return [None]*7
+        return c, h, l, o, v, vw, n
     result = results[0]
     c = result["c"]
     h = result["h"]
@@ -91,13 +93,12 @@ def get_daily_data(ticker):
     try:
         vw = result["vw"]
     except:
-        vw = None
+        pass
     try:
         n = result["n"]
     except:
-        n = None
+        pass
     return c, h, l, o, v, vw, n
-
 
 def get_2_minute_data(ticker, from_time, to_time):
     resp = get_response(
