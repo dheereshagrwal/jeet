@@ -1,36 +1,36 @@
 def get_pp(c, h, l):
     pp = (c + h + l) / 3
-    return round(pp, 2)
+    return pp
 
 
 def get_r4(c, h, l):
     r4 = c + ((h - l)*(1.1/2))
-    return round(r4, 2)
+    return r4
 
 
 def get_r5(c, h, l):
     r5 = c + ((h - l)*(0.865))
-    return round(r5, 2)
+    return r5
 
 
 def get_r6(c, h, l):
     r6 = c*(h/l)
-    return round(r6, 2)
+    return r6
 
 
 def get_s4(c, h, l):
     s4 = c - ((h - l)*(1.1/2))
-    return round(s4, 2)
+    return s4
 
 
 def get_s5(c, h, l):
     s5 = c - ((h - l)*(0.865))
-    return round(s5, 2)
+    return s5
 
 
 def get_s6(c, h, l):
     s6 = (c - (h / l * c - c))
-    return round(s6, 2)
+    return s6
 
 def get_PDC(c,h,l):
     pass
