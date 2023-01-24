@@ -1,6 +1,7 @@
 def get_targets(prev_c, abs_h, l_after_abs_h):
+    target_0 = target_25 = target_50 = target_75 = target_100 = None
     if (not prev_c) or (not abs_h) or (not l_after_abs_h):
-        return [None]*5
+        return target_0, target_25, target_50, target_75, target_100
     range = abs_h - prev_c
     quartile_percent = 100*((abs_h - l_after_abs_h)/range)
     target_0 = target_25 = target_50 = target_75 = target_100 = 0
