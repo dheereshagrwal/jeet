@@ -35,7 +35,7 @@ for ticker in tickers:
     cash_in_hand, cash_need, dt_overall_risk, dt_offering_ability, dt_amount_exceeding_shelf, dt_historical = get_dilution_data(
         ticker)
     print(f"cash_in_hand {cash_in_hand} cash_need {cash_need} dt_overall_risk {dt_overall_risk} dt_offering_ability {dt_offering_ability} dt_amount_exceeding_shelf {dt_amount_exceeding_shelf} dt_historical {dt_historical}")
-    name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding = get_basic_info(
+    name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding = get_ticker_info(
         ticker)
     print(f"name {name} ticker {ticker} primary_exchange {primary_exchange} type {type_} list_date {list_date} market_cap {market_cap} share_class_shares_outstanding {share_class_shares_outstanding}")
     if market_cap:
@@ -159,7 +159,7 @@ for ticker in tickers:
                 'Premarket Low Time': premarket_l_timestamp,  'Regular Market High Time': regular_market_h_timestamp, 'Regular Market Low Time': regular_market_l_timestamp,  'Highest Volume Time': highest_v_timestamp,  'name': name, 'primary_exchange': primary_exchange, 'list_date': list_date, 'type': type_, 'share_class_shares_outstanding': share_class_shares_outstanding, 'keywords': keywords, 'publishers': publishers, 'titles': titles, 'pp': pp, 'r4': r4, 'r5': r5, 'r6': r6, 's4': s4, 's5': s5, 's6': s6}
         row = pd.DataFrame([data])
         df = pd.concat([df, row])
-        #check if the master csv exists and if it does then append to it
+        # check if the master csv exists and if it does then append to it
         with open('master.csv', 'a') as f:
             row.to_csv(f, header=False, index=False)
 

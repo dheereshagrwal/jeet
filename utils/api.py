@@ -1,6 +1,8 @@
 
 # get apiKey from .env file
 
+import yfinance as yf
+import re
 from utils.date_helpers import *
 # from date_helpers import *
 import requests
@@ -15,10 +17,16 @@ def get_response(url):
     return response
 
 
-def get_basic_info(ticker):
+def get_ticker_info(ticker):
     resp = get_response(
         f"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={apiKey}")
-    name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding = None, None, None, None, None, None, None
+    name = None
+    ticker = None
+    primary_exchange = None
+    type_ = None
+    list_date = None
+    market_cap = None
+    share_class_shares_outstanding = None
     try:
         result = resp.json()["results"]
     except:
@@ -48,6 +56,7 @@ def get_basic_info(ticker):
         pass
     return name, ticker, primary_exchange, type_, list_date, market_cap, share_class_shares_outstanding
 
+
 '''
 def get_descriptions(ticker, curr_day):
     resp = get_response(
@@ -75,11 +84,18 @@ def get_descriptions(ticker, curr_day):
     return descriptions[:-1]
 '''
 
+
 def get_daily_data(ticker):
     curr_day = get_curr_day()
     resp = get_response(
         f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{curr_day}/{curr_day}?adjusted=true&sort=asc&apiKey={apiKey}")
-    c, h, l, o, v, vw, n = None, None, None, None, None, None, None
+    c = None
+    h = None
+    l = None
+    o = None
+    v = None
+    vw = None
+    n = None
     try:
         results = resp.json()["results"]
     except:
@@ -99,6 +115,7 @@ def get_daily_data(ticker):
     except:
         pass
     return c, h, l, o, v, vw, n
+
 
 def get_2_minute_data(ticker, from_time, to_time):
     resp = get_response(
@@ -124,19 +141,18 @@ def get_prev_day_data(ticker):
     return result
 
 
-
-import re
-def get_result_from_single_description(ticker,description):
-    #split description according to '\n'
+def get_result_from_single_description(ticker, description):
+    # split description according to '\n'
     description = description.split('\n')
     description = list(filter(None, description))
     description = [x.strip() for x in description]
-    print(f"len of description: {len(description)} and description: {description}")
+    print(
+        f"len of description: {len(description)} and description: {description}")
     pattern = re.compile(r'\([A-Za-z]+\s*:\s*' + ticker + '\)')
     result = [i for i in description if pattern.search(i)]
     print(f"result: {result}")
 
-import yfinance as yf
+
 def get_news(ticker):
     try:
         news = yf.Ticker(ticker).news
