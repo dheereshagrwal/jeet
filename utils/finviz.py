@@ -1,5 +1,10 @@
 from finvizfinance.quote import finvizfinance
 def get_finviz_data(ticker):
+    shs_float = None
+    inst_own = None
+    short_float_percent = None
+    insider_own = None
+    atr = None
     try:
         stock = finvizfinance(ticker)
         ticker_fundament = stock.ticker_fundament()
@@ -9,7 +14,8 @@ def get_finviz_data(ticker):
         short_float_percent = short_float_percent.split("/")[0].strip()
         insider_own = ticker_fundament["Insider Own"]
         atr = ticker_fundament["ATR"]
-        return shs_float, inst_own, short_float_percent, insider_own,atr
     except:
-        return [None]*5
+        pass
+    return shs_float, inst_own, short_float_percent, insider_own, atr
+    
 
