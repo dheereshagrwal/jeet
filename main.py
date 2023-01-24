@@ -62,11 +62,17 @@ for ticker in tickers:
         pdc_range_percent = round(pdc_range_percent, 2)
     if pp:
         pp = round(pp, 2)
+    if r4:
         r4 = round(r4, 2)
+    if r5:
         r5 = round(r5, 2)
+    if r6:
         r6 = round(r6, 2)
+    if s4:
         s4 = round(s4, 2)
+    if s5:
         s5 = round(s5, 2)
+    if s6:
         s6 = round(s6, 2)
     # 2-minute bars
     time.sleep(sleep_time)
