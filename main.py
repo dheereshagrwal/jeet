@@ -52,10 +52,9 @@ for ticker in tickers:
     time.sleep(sleep_time)
     # get previous day misc data
     # if we did not get daily data that means o is None, we will handle that case
-    gap_percent, pdc_range_percent, pp, r4, r5, r6, s4, s5, s6, prev_c = get_misc_prev_day_data(
+    gap_percent, pdc_range_percent, pp, r4, r5, r6, s4, s5, s6, prev_c,prev_h,prev_l = get_misc_prev_day_data(
         ticker, o, h)
-    print(
-        f"gap_percent {gap_percent} pdc_range_percent {pdc_range_percent} pp {pp} r4 {r4} r5 {r5} r6 {r6} s4 {s4} s5 {s5} s6 {s6} prev_c {prev_c}")
+    print(f"gap_percent {gap_percent} pdc_range_percent {pdc_range_percent} pp {pp} r4 {r4} r5 {r5} r6 {r6} s4 {s4} s5 {s5} s6 {s6} prev_c {prev_c} prev_h {prev_h} prev_l {prev_l}")
     if gap_percent:
         gap_percent = round(gap_percent, 2)
     if pdc_range_percent:
