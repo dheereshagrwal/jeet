@@ -75,13 +75,13 @@ for ticker in tickers:
         s6 = round(s6, 2)
     # 2-minute bars
     time.sleep(sleep_time)
-    total_range_percent = get_total_range_percent(ticker)
+    total_range_percent = get_total_range_percent(ticker,curr_day)
     print(f"total_range_percent {total_range_percent}")
     if total_range_percent:
         total_range_percent = round(total_range_percent, 2)
     time.sleep(sleep_time)
-    highest_v_timestamp, highest_v_n, highest_v, aggregate_v_before_highest_v, highest_bar_v_ratio_percent = get_misc_2_min_data_today_till_3_58(
-        ticker)
+    highest_v_timestamp, highest_v_n, highest_v, aggregate_v_before_highest_v, highest_bar_v_ratio_percent = get_misc_2_min_data_till_3_58(
+        ticker, curr_day)
     print(f"highest_v_timestamp {highest_v_timestamp} highest_v_n {highest_v_n} highest_v {highest_v} aggregate_v_before_highest_v {aggregate_v_before_highest_v} highest_bar_v_ratio_percent {highest_bar_v_ratio_percent}")
     if aggregate_v_before_highest_v:
         aggregate_v_before_highest_v = numerize.numerize(
@@ -95,7 +95,7 @@ for ticker in tickers:
             highest_v_timestamp)
     time.sleep(sleep_time)
     premarket_v_cumulative, premarket_h, premarket_h_timestamp, premarket_l, premarket_l_timestamp, premarket_range_percent, daily_volume_forecast = get_misc_2_min_data_premarket(
-        ticker)
+        ticker, curr_day)
     print(f"premarket_v_cumulative {premarket_v_cumulative} premarket_h {premarket_h} premarket_h_timestamp {premarket_h_timestamp} premarket_l {premarket_l} premarket_l_timestamp {premarket_l_timestamp} premarket_range_percent {premarket_range_percent} daily_volume_forecast {daily_volume_forecast}")
 
     if daily_volume_forecast:
@@ -109,12 +109,12 @@ for ticker in tickers:
         premarket_l_timestamp = convert_millis_to_local_time(
             premarket_l_timestamp)
     time.sleep(sleep_time)
-    first_hour_v = get_misc_2_min_data_first_hour(ticker)
+    first_hour_v = get_misc_2_min_data_first_hour(ticker, curr_day)
     print(f"first_hour_v {first_hour_v}")
     time.sleep(sleep_time)
     # get regular market high and low timestamps
     regular_market_h_timestamp, regular_market_l_timestamp = get_misc_2_min_data_regular_market(
-        ticker)
+        ticker, curr_day)
     print(
         f"regular_market_h_timestamp {regular_market_h_timestamp} regular_market_l_timestamp {regular_market_l_timestamp}")
     if regular_market_h_timestamp:
@@ -125,9 +125,9 @@ for ticker in tickers:
             regular_market_l_timestamp)
 
     time.sleep(sleep_time)
-    abs_h, abs_h_timestamp = get_abs_h(ticker)
+    abs_h, abs_h_timestamp = get_abs_h(ticker, curr_day)
     print(f"abs_h {abs_h} abs_h_timestamp {abs_h_timestamp}")
-    l_after_abs_h = get_l_after_abs_h(abs_h, abs_h_timestamp, ticker)
+    l_after_abs_h = get_l_after_abs_h(abs_h, abs_h_timestamp, ticker, curr_day)
     print(f"l_after_abs_h {l_after_abs_h}")
     target_0, target_25, target_50, target_75, target_100 = get_targets(
         prev_c, abs_h, l_after_abs_h)

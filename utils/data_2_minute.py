@@ -2,10 +2,9 @@ from utils.api import *
 from utils.date_helpers import *
 
 
-def get_total_range_percent(ticker):
-    curr_day = get_curr_day()
-    from_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
-    to_time = get_timestamp(curr_day, "21:00:00")  # 9pm
+def get_total_range_percent(ticker,day):
+    from_time = get_timestamp(day, "14:30:00")  # 2.30pm
+    to_time = get_timestamp(day, "21:00:00")  # 9pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return None
@@ -18,15 +17,14 @@ def get_total_range_percent(ticker):
     return total_range_percent
 
 
-def get_misc_2_min_data_today_till_3_58(ticker):
-    curr_day = get_curr_day()
+def get_misc_2_min_data_till_3_58(ticker, day):
     # only till 3.58pm
-    highest_v = 0
+    highest_v = float("-inf")
     highest_v_timestamp = None
-    highest_v_n = 0
+    highest_v_n = float("-inf")
     aggregate_v_before_highest_v = 0
-    from_time = curr_day
-    to_time = get_timestamp(curr_day, "20:58:00")  # 8.58pm
+    from_time = day
+    to_time = get_timestamp(day, "20:58:00")  # 8.58pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return [None]*5
@@ -48,15 +46,14 @@ def get_misc_2_min_data_today_till_3_58(ticker):
     return highest_v_timestamp, highest_v_n, highest_v, aggregate_v_before_highest_v, highest_bar_v_ratio_percent
 
 
-def get_misc_2_min_data_premarket(ticker):
-    curr_day = get_curr_day()
-    from_time = curr_day
-    to_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
+def get_misc_2_min_data_premarket(ticker,day):
+    from_time = day
+    to_time = get_timestamp(day, "14:28:00")  # 2.28pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return [None]*7
     premarket_v_cumulative = 0
-    premarket_h = 0
+    premarket_h = float("-inf")
     premarket_h_timestamp = None
     premarket_l = float("inf")
     premarket_l_timestamp = None
@@ -74,10 +71,9 @@ def get_misc_2_min_data_premarket(ticker):
     return premarket_v_cumulative, premarket_h, premarket_h_timestamp, premarket_l, premarket_l_timestamp, premarket_range_percent, daily_volume_forecast
 
 
-def get_misc_2_min_data_first_hour(ticker):
-    curr_day = get_curr_day()
-    from_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
-    to_time = get_timestamp(curr_day, "15:30:00")  # 3.30pm
+def get_misc_2_min_data_first_hour(ticker,day):
+    from_time = get_timestamp(day, "14:30:00")  # 2.30pm
+    to_time = get_timestamp(day, "15:30:00")  # 3.30pm
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return None
@@ -87,16 +83,15 @@ def get_misc_2_min_data_first_hour(ticker):
     return first_hour_v_cumulative
 
 
-def get_misc_2_min_data_regular_market(ticker):
-    curr_day = get_curr_day()
-    from_time = get_timestamp(curr_day, "14:30:00")  # 2.30pm
-    to_time = get_timestamp(curr_day, "21:00:00")  # 9.00pm
+def get_misc_2_min_data_regular_market(ticker,day):
+    from_time = day
+    to_time = day
     results = get_2_minute_data(ticker, from_time, to_time)
-    if not results:
-        return [None]*4
     regular_market_h_timestamp = None
     regular_market_l_timestamp = None
-    regular_market_h = 0
+    if not results:
+        return regular_market_h_timestamp, regular_market_l_timestamp
+    regular_market_h = float("-inf")
     regular_market_l = float("inf")
     for res in results:
         regular_market_h = max(regular_market_h, res["h"])
@@ -108,10 +103,9 @@ def get_misc_2_min_data_regular_market(ticker):
     return regular_market_h_timestamp, regular_market_l_timestamp
 
 
-def get_l_after_abs_h(abs_h, abs_h_timestamp, ticker):
-    curr_day = get_curr_day()
+def get_l_after_abs_h(abs_h, abs_h_timestamp, ticker,day):
     from_time = abs_h_timestamp
-    to_time = curr_day
+    to_time = day
     if not from_time or not abs_h:
         print(f"abs_h_timestamp is None for {ticker}")
         return None
@@ -128,10 +122,9 @@ def get_l_after_abs_h(abs_h, abs_h_timestamp, ticker):
     return l_after_abs_h
 
 
-def get_abs_h(ticker):
-    curr_day = get_curr_day()
-    from_time = get_timestamp(curr_day, "9:00:00")  # 9.00am
-    to_time = curr_day
+def get_abs_h(ticker,day):
+    from_time = get_timestamp(day, "9:00:00")  # 9.00am
+    to_time = day
     results = get_2_minute_data(ticker, from_time, to_time)
     if not results:
         return [None]*2
