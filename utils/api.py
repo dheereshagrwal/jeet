@@ -58,9 +58,9 @@ def get_ticker_info(ticker):
 
 
 '''
-def get_descriptions(ticker, curr_day):
+def get_descriptions(ticker, today):
     resp = get_response(
-        f"https://api.polygon.io/v2/reference/news?published_utc={curr_day}&ticker={ticker}&apiKey={apiKey}")
+        f"https://api.polygon.io/v2/reference/news?published_utc={today}&ticker={ticker}&apiKey={apiKey}")
     pattern = re.compile(r'\([A-Za-z]+\s*:\s*' + ticker + '\)')
     try:
         results = resp.json()["results"]
@@ -86,9 +86,9 @@ def get_descriptions(ticker, curr_day):
 
 
 def get_daily_data(ticker):
-    curr_day = get_curr_day()
+    today = get_today()
     resp = get_response(
-        f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{curr_day}/{curr_day}?adjusted=true&sort=asc&apiKey={apiKey}")
+        f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{today}/{today}?adjusted=true&sort=asc&apiKey={apiKey}")
     c = None
     h = None
     l = None
@@ -166,14 +166,14 @@ def get_news(ticker):
     publishers = ""
     titles = []
     prev_day = get_prev_day()
-    curr_day = get_curr_day()
-    print(f"prev_day: {prev_day} and curr_day: {curr_day}")
+    today = get_today()
+    print(f"prev_day: {prev_day} and today: {today}")
     for n in news:
         try:
             providerPublishTime = n["providerPublishTime"]
             published_date = convert_seconds_to_utc_date(providerPublishTime)
-            # if published_date is either prev_day or curr_day, then add title to titles and publisher to publishers
-            if published_date == prev_day or published_date == curr_day:
+            # if published_date is either prev_day or today, then add title to titles and publisher to publishers
+            if published_date == prev_day or published_date == today:
                 publisher = n["publisher"]
                 title = n["title"]
                 publishers += publisher + "\n"

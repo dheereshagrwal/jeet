@@ -15,12 +15,12 @@ def get_timestamp(date, time):
 load_dotenv()
 
 
-def get_curr_day():
+def get_today():
     try:
-        curr_day = os.getenv("curr_day")
-        return curr_day
+        today = os.getenv("today")
+        return today
     except:
-        print("curr_day not found in .env file, exiting...")
+        print("today not found in .env file, exiting...")
         exit()
 
 
