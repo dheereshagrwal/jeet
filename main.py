@@ -240,6 +240,10 @@ today = get_today()
 filename = os.getenv('filename')
 if os.path.exists(filename):
     with pd.ExcelWriter(filename, engine='openpyxl', mode='a') as writer:
+        #if sheet exists then delete it
+        if today in writer.book.sheetnames:
+            idx = writer.book.sheetnames.index(today)
+            writer.book.remove(writer.book.worksheets[idx])
         df.to_excel(writer, sheet_name=today, index=False)
 else:
     df.to_excel(filename, sheet_name=today, index=False)
