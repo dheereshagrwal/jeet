@@ -166,12 +166,8 @@ cython_debug/
 # Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
 poetry.toml
 
-# add data.xlsx to gitignore
 data.xlsx
-#add tickers.txt to gitignore
 tickers.txt
-#add keywords.txt to gitignore
 keywords.txt
-#add master.csv to gitignore
-master.csv
 # End of https://www.toptal.com/developers/gitignore/api/python
+master.csv
