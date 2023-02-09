@@ -15,6 +15,12 @@ from numerize_denumerize import numerize
 load_dotenv()
 sleep_time = int(os.getenv("sleep_time"))
 print(f"sleep_time is {sleep_time}")
+today = get_today()
+prev_day = get_prev_day()
+#check if prev_day is greater than or equal to today
+if prev_day >= today:
+    print("prev_day is greater than or equal to today, quitting...")
+    exit()
 
 # '''
 try:
@@ -28,7 +34,6 @@ except:
     exit()
 
 print()
-
 df = pd.DataFrame()
 for ticker in tickers:
     print(f"ticker is {ticker}")
@@ -245,10 +250,20 @@ else:
     df.to_excel(filename, sheet_name=today, index=False)
 # '''
 
-#read master excel file and drop duplicates based on ticker and date and sort by date
-# df = pd.read_excel('master.xlsx')
-# df = df.drop_duplicates(subset=['ticker', 'today'], keep='last')
-# df = df.sort_values(by=['today'])
-# df.to_excel('master.xlsx', index=False)
+#append the df to master csv file and add header if file does not exist
+master_filename = os.getenv('master_filename')
+if os.path.exists(master_filename):
+    df.to_csv(master_filename, mode='a', header=False, index=False)
+else:
+    df.to_csv(master_filename, index=False)
+
+#read master csv file and drop duplicates based on ticker and date and sort by date
+df = pd.read_csv(master_filename)
+df = df.drop_duplicates(subset=['ticker', 'today'], keep='last')
+#sort values by date in ascending order
+df = df.sort_values(by=['today'], ascending=True)
+#write to master csv file
+df.to_csv(master_filename, index=False)
+
 
 
