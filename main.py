@@ -56,9 +56,9 @@ for ticker in tickers:
         ticker, o, h)
     print(f"gap_percent {gap_percent} pdc_range_percent {pdc_range_percent} pp {pp} r4 {r4} r5 {r5} r6 {r6} s4 {s4} s5 {s5} s6 {s6} prev_c {prev_c} prev_h {prev_h} prev_l {prev_l}")
     if gap_percent:
-        gap_percent = round(gap_percent, 2)
+        gap_percent = str(round(gap_percent, 2)) + "%"
     if pdc_range_percent:
-        pdc_range_percent = round(pdc_range_percent, 2)
+        pdc_range_percent = str(round(pdc_range_percent, 2)) + "%"
     if pp:
         pp = round(pp, 2)
     if r4:
@@ -87,7 +87,7 @@ for ticker in tickers:
         aggregate_v_before_highest_v = numerize.numerize(
             aggregate_v_before_highest_v, 2)
     if highest_bar_v_ratio_percent:
-        highest_bar_v_ratio_percent = round(highest_bar_v_ratio_percent, 2)
+        highest_bar_v_ratio_percent = str(round(highest_bar_v_ratio_percent, 2)) + "%"
     if highest_v:
         highest_v = numerize.numerize(highest_v, 2)
     if highest_v_timestamp:
@@ -101,7 +101,7 @@ for ticker in tickers:
     if daily_volume_forecast:
         daily_volume_forecast = numerize.numerize(daily_volume_forecast, 2)
     if premarket_range_percent:
-        premarket_range_percent = round(premarket_range_percent, 2)
+        premarket_range_percent = str(round(premarket_range_percent, 2)) + "%"
     if premarket_h_timestamp:
         premarket_h_timestamp = convert_millis_to_local_time(
             premarket_h_timestamp)
@@ -139,21 +139,22 @@ for ticker in tickers:
     daily_ft_percent = get_daily_ft_percent(v, shs_float)
     print(f"daily_ft_percent {daily_ft_percent}")
     if daily_ft_percent:
-        daily_ft_percent = round(daily_ft_percent, 2)
+        daily_ft_percent = str(round(daily_ft_percent, 2)) + "%"
     pm_ft_percent = get_premarket_ft_percent(premarket_v_cumulative, shs_float)
     print(f"pm_ft_percent {pm_ft_percent}")
     if pm_ft_percent:
-        pm_ft_percent = round(pm_ft_percent, 2)
+        pm_ft_percent = str(round(pm_ft_percent, 2)) + "%"
     first_hour_ft_percent = get_first_hour_ft_percent(first_hour_v, shs_float)
     print(f"first_hour_ft_percent {first_hour_ft_percent}")
     if first_hour_ft_percent:
-        first_hour_ft_percent = round(first_hour_ft_percent, 2)
+        first_hour_ft_percent = str(round(first_hour_ft_percent, 2)) + "%"
     if v:
         v = numerize.numerize(v, 2)
     if first_hour_v:
         first_hour_v = numerize.numerize(first_hour_v, 2)
     if premarket_v_cumulative:
         premarket_v_cumulative = numerize.numerize(premarket_v_cumulative, 2)
+
     publishers, titles = get_news(ticker)
     print(f"publishers {publishers} titles {titles}")
     keywords = get_keywords(titles)
@@ -171,9 +172,9 @@ for ticker in tickers:
             'Short Float': short_float_percent,
             'ATR': atr,
             'PDC Range %': pdc_range_percent,
-            'total_range_percent': total_range_percent,
-            'premarket_range_percent': premarket_range_percent,
-            'gap_percent': gap_percent,
+            'Total Range %': total_range_percent,
+            'Premarket Range %': premarket_range_percent,
+            'Gap %': gap_percent,
             'Cash In Hand': cash_in_hand,
             'Cash Need': cash_need,
             'DT Overall Risk': dt_overall_risk,
@@ -224,13 +225,8 @@ for ticker in tickers:
             's5': s5,
             's6': s6,
         }
-
         row = pd.DataFrame([data])
         df = pd.concat([df, row])
-        # check if the master csv exists and if it does then append to it
-        with open('master.csv', 'a') as f:
-            row.to_csv(f, header=False, index=False)
-
     except:
         print("Error in concat")
 
@@ -240,7 +236,7 @@ today = get_today()
 filename = os.getenv('filename')
 if os.path.exists(filename):
     with pd.ExcelWriter(filename, engine='openpyxl', mode='a') as writer:
-        #if sheet exists then delete it
+        # if sheet exists then delete it
         if today in writer.book.sheetnames:
             idx = writer.book.sheetnames.index(today)
             writer.book.remove(writer.book.worksheets[idx])
@@ -248,3 +244,11 @@ if os.path.exists(filename):
 else:
     df.to_excel(filename, sheet_name=today, index=False)
 # '''
+
+#read master excel file and drop duplicates based on ticker and date and sort by date
+# df = pd.read_excel('master.xlsx')
+# df = df.drop_duplicates(subset=['ticker', 'today'], keep='last')
+# df = df.sort_values(by=['today'])
+# df.to_excel('master.xlsx', index=False)
+
+
