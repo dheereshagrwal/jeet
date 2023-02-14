@@ -167,7 +167,5 @@ cython_debug/
 poetry.toml
 
 data.xlsx
-tickers.txt
-keywords.txt
 # End of https://www.toptal.com/developers/gitignore/api/python
 master.csv
