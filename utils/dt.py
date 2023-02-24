@@ -21,7 +21,7 @@ submit_button = driver.find_element(
 
 submit_button.click()
 
-time.sleep(2)
+time.sleep(4)
 print("logged in")
 
 
