@@ -2,8 +2,8 @@ from utils.pivot_points import *
 from utils.api import *
 
 
-def get_misc_prev_day_data(ticker, today_o, today_h):
-    result = get_prev_day_data(ticker)
+def get_misc_prev_day_data(ticker, today_o, today_h,prev_day):
+    result = get_prev_day_data(ticker,prev_day)
     gap_percent = None
     pdc_range_percent = None
     pp = None

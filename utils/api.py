@@ -85,8 +85,7 @@ def get_descriptions(ticker, today):
 '''
 
 
-def get_daily_data(ticker):
-    today = get_today()
+def get_daily_data(ticker,today):
     resp = get_response(
         f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{today}/{today}?adjusted=true&sort=asc&apiKey={apiKey}")
     c = None
@@ -128,8 +127,7 @@ def get_2_minute_data(ticker, from_time, to_time):
     return results
 
 
-def get_prev_day_data(ticker):
-    prev_day = get_prev_day()
+def get_prev_day_data(ticker,prev_day):
     resp = get_response(
         f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{prev_day}/{prev_day}?adjusted=true&sort=asc&apiKey={apiKey}")
     result = None
@@ -153,7 +151,7 @@ def get_result_from_single_description(ticker, description):
     print(f"result: {result}")
 
 
-def get_news(ticker):
+def get_news(ticker,prev_day,today):
     try:
         news = yf.Ticker(ticker).news
         print(f"news: {news}")
@@ -165,8 +163,6 @@ def get_news(ticker):
         return [None]*2
     publishers = ""
     titles = []
-    prev_day = get_prev_day()
-    today = get_today()
     print(f"prev_day: {prev_day} and today: {today}")
     for n in news:
         try:
