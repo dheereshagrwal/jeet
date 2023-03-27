@@ -10,6 +10,7 @@ from utils.targets import *
 from utils.finviz import *
 from utils.ft import *
 from utils.keywords import *
+from utils.input import *
 from dotenv import load_dotenv
 from numerize_denumerize import numerize
 load_dotenv()
