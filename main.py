@@ -245,9 +245,9 @@ for key in ticker_dict:
     else:
         df.to_csv(master_filename, index=False)
 
-    #read master csv file and drop duplicates based on ticker and date and sort by date
+    #read master csv file and drop duplicates based on ticker, today, prev_day and keep the last row
     df = pd.read_csv(master_filename)
-    df = df.drop_duplicates(subset=['ticker', 'today'], keep='last')
+    df = df.drop_duplicates(subset=['ticker', 'today', 'prev_day'], keep='last')
     #sort values by date in ascending order
     df = df.sort_values(by=['today'], ascending=True)
     #write to master csv file
