@@ -154,7 +154,8 @@ for key in ticker_dict:
         print(f"publishers {publishers} titles {titles}")
         keywords = get_keywords(titles)
         print(f"keywords {keywords}")
-        titles = '\n'.join(titles)
+        if titles:
+            titles = '\n'.join(titles)
         try:
             data = {
                 'prev_day': prev_day,
