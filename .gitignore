@@ -131,6 +131,9 @@ ENV/
 env.bak/
 venv.bak/
 input.xlsx
+master.csv
+keywords.txt
+data.xlsx
 # Spyder project settings
 .spyderproject
 .spyproject
