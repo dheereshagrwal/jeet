@@ -48,7 +48,8 @@ def get_misc_2_min_data_till_3_58(ticker, day):
 
     for res in results[:highest_v_index]:
         aggregate_v_before_highest_v += res["v"]
-
+    if aggregate_v_before_highest_v == 0:
+        aggregate_v_before_highest_v = 1
     highest_bar_v_ratio_percent = highest_v / aggregate_v_before_highest_v * 100
     return highest_v_timestamp, highest_v_n, highest_v, aggregate_v_before_highest_v, highest_bar_v_ratio_percent
 
